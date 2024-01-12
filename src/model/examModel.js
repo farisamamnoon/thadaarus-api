@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const examModel = mongoose.Schema({
-  name: {
-    type: String,
+  class: {
+    type: mongoose.Types.ObjectId,
     required: true,
+    ref: "classModel",
   },
   date: {
     type: Date,
@@ -12,6 +13,7 @@ const examModel = mongoose.Schema({
   subject: {
     type: mongoose.Types.ObjectId,
     required: true,
+    ref: "subjectModel",
   },
 });
 

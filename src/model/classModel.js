@@ -13,11 +13,16 @@ const classModel = mongoose.Schema({
     type: Number,
     required: true,
   },
+  teacher: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "teacherModel"
+  },
   subjects: [
     {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: "subjectModels",
+      ref: "subjectModel",
     },
   ],
   studentsId: [
