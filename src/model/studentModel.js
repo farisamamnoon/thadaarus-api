@@ -18,6 +18,10 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  group: {
+    type: String,
+    required: true,
+  },
   attendance: [
     {
       date: {
