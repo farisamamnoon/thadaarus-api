@@ -1,10 +1,19 @@
 import mongoose from "mongoose";
 
 const classModel = mongoose.Schema({
-  name: {
+  standard: {
     type: String,
     required: true,
   },
+  division: {
+    type: String,
+    required: false,
+  },
+  fees: {
+    type: Number,
+    required: true,
+  },
+  // just year might be enough
   batchStart: {
     type: Number,
     required: true,
@@ -16,22 +25,19 @@ const classModel = mongoose.Schema({
   teacher: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "teacherModel"
+    ref: "Teachers",
   },
   subjects: [
     {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "subjectModel",
     },
   ],
   studentsId: [
     {
-      studentsId: {
-        type: mongoose.Types.ObjectId,
-        required: false,
-        ref: "studentsModel",
-      },
+      type: mongoose.Types.ObjectId,
+      required: false,
+      ref: "Students",
     },
   ],
 });

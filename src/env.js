@@ -5,7 +5,7 @@ dotenv.config();
 
 const env = cleanEnv(process.env, {
 	ENV: str({ choices: ['local', 'production'], default: 'local' }),
-	PORT: port({ default: 6000 }),
+	PORT: port({ default: 5000 }),
 	JWT_SECRET_KEY: str({
 		default:
 			'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluQGVtYy5jb20ifQ.xCyQt3wQXRj8NojG-m26LS9GktX90VBxU15BoxLuTS8',

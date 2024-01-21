@@ -8,7 +8,15 @@ const studentSchema = new mongoose.Schema({
   class: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: classModel,
+    ref: "Class",
+  },
+  dob: {
+    type: Date,
+    required: true,
+  },
+  age: {
+    type: Number,
+    required: true,
   },
   phone: {
     type: Number,
@@ -22,6 +30,18 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  prevMadrasa: {
+    type: String,
+    required: false,
+  },
+  prevClass: {
+    type: String,
+    required: false,
+  },
+  remarks: {
+    type: String,
+    required: false,
+  },
   attendance: [
     {
       date: {
@@ -34,12 +54,13 @@ const studentSchema = new mongoose.Schema({
       },
     },
   ],
+  // match student class with exam class and view subject names(/exam/marks/add)
   exams: [
     {
       examId: {
         type: mongoose.Types.ObjectId,
         required: false,
-        ref: "examModel",
+        ref: "Exams",
       },
       mark: {
         type: Number,

@@ -6,16 +6,14 @@ const eventModel = new mongoose.Schema({
     required: true,
   },
   date: {
-    type : Date,
-    required: true
+    type: Date,
+    required: true,
   },
   participants: [
     {
-      studentsId: {
-        type: mongoose.Types.ObjectId,
-        required: false,
-        ref: "studentsModel",
-      },
+      type: mongoose.Types.ObjectId,
+      required: false,
+      ref: "Students",
     },
   ],
   ranking: [
@@ -27,8 +25,8 @@ const eventModel = new mongoose.Schema({
       studentId: {
         type: mongoose.Types.ObjectId,
         required: false,
-        ref: "studentsModel"
-      }
+        ref: "Students",
+      },
     },
   ],
 });

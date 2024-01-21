@@ -9,23 +9,31 @@ const teacherSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  age: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    required: false,
+  },
   class: {
     type: mongoose.Types.ObjectId,
     required: false,
-    ref: "classModel",
+    ref: "Class",
   },
   subjects: [
     {
       subjectId: {
         type: mongoose.Types.ObjectId,
         required: false,
-        ref: "subjectModel",
+        ref: "Subjects",
       },
       classId: {
         type: mongoose.Types.ObjectId,
         required: false,
-        ref: "classModel",
-      }
+        ref: "Class",
+      },
     },
   ],
 });

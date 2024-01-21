@@ -4,11 +4,16 @@ const homeworkModel = mongoose.Schema({
   subjectId: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: "subjectModels",
+    ref: "Subjects",
   },
   description: {
     type: String,
     required: true,
+  },
+  class: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: 'Class'
   },
   date: {
     type: Date,
@@ -18,10 +23,9 @@ const homeworkModel = mongoose.Schema({
     {
       type: mongoose.Types.ObjectId,
       required: false,
-      ref: "studentsModel",
+      ref: "Students",
     },
   ],
 });
 
-export default mongoose.model("Homework", homeworkModel);
-
+export default mongoose.model("Homeworks", homeworkModel);
