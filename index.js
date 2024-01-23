@@ -3,6 +3,8 @@ import ConnectDB from "./src/config/db.js";
 import express from "express";
 import cors from "cors";
 import { studentRoutes } from "./src/routes/studentRoutes.js";
+import { classRoutes } from "./src/routes/classRoutes.js";
+import { teacherRoutes } from './src/routes/teacherRoutes.js';
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(express.json());
 const { PORT } = env;
 
 app.use("/dashboard/api/student", studentRoutes);
+app.use("/dashboard/api/class", classRoutes);
+app.use("/dashboard/api/teacher", teacherRoutes);
 // app.use("dashboard/api/teacher", teacherRoutes);
 
 app.use((req, res, next) => {

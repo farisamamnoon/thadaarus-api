@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const classModel = mongoose.Schema({
-  standard: {
+  className: {
     type: String,
     required: true,
   },
@@ -14,18 +14,16 @@ const classModel = mongoose.Schema({
     required: true,
   },
   // just year might be enough
-  batchStart: {
-    type: Number,
-    required: true,
-  },
-  batchEnd: {
+  batch: {
     type: Number,
     required: true,
   },
   teacher: {
-    type: mongoose.Types.ObjectId,
+    // type: mongoose.Types.ObjectId,
+    // required: true,
+    // ref: "Teachers",
+    type: String,
     required: true,
-    ref: "Teachers",
   },
   subjects: [
     {
