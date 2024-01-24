@@ -10,15 +10,19 @@ const examModel = mongoose.Schema({
     required: true,
     ref: "Class",
   },
-  date: {
-    type: Date,
-    required: true,
-  },
-  subject: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-    ref: "Subject",
-  },
+  exams: [
+    {
+      date: {
+        type: Date,
+        required: true,
+      },
+      subject: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "Subject",
+      },
+    },
+  ],
 });
 
 export default mongoose.model("Exams", examModel);

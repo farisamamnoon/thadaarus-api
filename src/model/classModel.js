@@ -18,13 +18,6 @@ const classModel = mongoose.Schema({
     type: Number,
     required: true,
   },
-  teacher: {
-    // type: mongoose.Types.ObjectId,
-    // required: true,
-    // ref: "Teachers",
-    type: String,
-    required: true,
-  },
   subjects: [
     {
       type: String,

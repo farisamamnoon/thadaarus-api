@@ -1,3 +1,4 @@
+import studentModel from "../model/studentModel.js";
 import teacherModel from "../model/teacherModel.js";
 
 export const createTeacher = async (req, res) => {
@@ -22,23 +23,18 @@ export const createTeacher = async (req, res) => {
   }
 };
 
-export const viewTeacher = async (req, res) => {
-  try{  
-    const teacher = await teacherModel.find({}, (error, data) => {
-      if(error){
-        return res.status(500).json({
-          success: false,
-          message: 'There was an error'
-        })
-      } else{
-        return res.status(200).json(data)
-      }
-
-    })
-  } catch(error){
+export const getTeachers = async (req, res) => {
+  try {
+    const teachers = await teacherModel.find();
+    return res.status(200).json({
+      success: true,
+      message: "Teacher data fetched successfully",
+      data: teachers,
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Internal Server Error'
-    })
+      message: "Internal Server Error",
+    });
   }
-}
+};

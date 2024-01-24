@@ -1,8 +1,8 @@
 import express from 'express';
 
-import { createTeacher, viewTeacher } from '../controller/teacherController.js';
+import { createTeacher, getTeachers } from '../controller/teacherController.js';
 
 export const teacherRoutes = express.Router();
 
-teacherRoutes.get('', viewTeacher);
 teacherRoutes.post('/create', createTeacher);
+teacherRoutes.get('/get-all', getTeachers);

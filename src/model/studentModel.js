@@ -35,7 +35,7 @@ const studentSchema = new mongoose.Schema({
     required: false,
   },
   prevClass: {
-    type: String,
+    type: Number,
     required: false,
   },
   remarks: {
