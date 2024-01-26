@@ -5,6 +5,7 @@ import cors from "cors";
 import { studentRoutes } from "./src/routes/studentRoutes.js";
 import { classRoutes } from "./src/routes/classRoutes.js";
 import { teacherRoutes } from './src/routes/teacherRoutes.js';
+import { examRoutes } from './src/routes/examRoutes.js';
 
 const app = express();
 
@@ -13,10 +14,12 @@ app.use(express.json());
 
 const { PORT } = env;
 
+
+//ROUTES
 app.use("/dashboard/api/student", studentRoutes);
 app.use("/dashboard/api/class", classRoutes);
 app.use("/dashboard/api/teacher", teacherRoutes);
-// app.use("dashboard/api/teacher", teacherRoutes);
+app.use("/dashboard/api/exam", examRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");

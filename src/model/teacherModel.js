@@ -32,11 +32,11 @@ const teacherSchema = new mongoose.Schema({
         required: false
       },
       classId: {
-        // type: mongoose.Types.ObjectId,
-        // required: false,
-        // ref: "Class",
-        type: String,
-        required: false
+        type: mongoose.Types.ObjectId,
+        required: false,
+        ref: "Class",
+        // type: String,
+        // required: false
       },
     },
   ],

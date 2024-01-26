@@ -9,11 +9,15 @@ const classModel = mongoose.Schema({
     type: String,
     required: false,
   },
+  teacherId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "Teachers",
+  },
   fees: {
     type: Number,
     required: true,
   },
-  // just year might be enough
   batch: {
     type: Number,
     required: true,
@@ -22,13 +26,6 @@ const classModel = mongoose.Schema({
     {
       type: String,
       required: true,
-    },
-  ],
-  studentsId: [
-    {
-      type: mongoose.Types.ObjectId,
-      required: false,
-      ref: "Students",
     },
   ],
 });
