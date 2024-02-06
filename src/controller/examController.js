@@ -8,10 +8,26 @@ export const createExam = async (req, res) => {
       classId: classId,
       exams: exams,
     });
-    
+
     return res.status(200).json({
       success: true,
       message: "Exam data created successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const getExams = async (req, res) => {
+  try {
+    const exams = await examModel.find();
+    return res.status(200).json({
+      success: true,
+      message: "Exam data created successfully",
+      data: exams,
     });
   } catch (error) {
     res.status(500).json({

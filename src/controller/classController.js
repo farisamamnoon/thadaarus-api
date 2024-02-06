@@ -1,5 +1,6 @@
 import classModel from "../model/classModel.js";
 
+//create new class
 export const createClass = async (req, res) => {
   try {
     const { className, division, subjects, batch, fees, teacherId } = req.body;
@@ -24,6 +25,7 @@ export const createClass = async (req, res) => {
   }
 };
 
+//get all classes
 export const getClasses = async (req, res) => {
   try {
     const classes = await classModel.find();

@@ -76,11 +76,11 @@ const studentSchema = new mongoose.Schema({
       },
       amount: {
         type: Number,
-        required: true,
+        required: false,
       },
-      discounted: {
+      discount: {
         type: Number,
-        required: true,
+        required: false,
       },
     },
   ],
