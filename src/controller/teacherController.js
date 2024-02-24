@@ -10,7 +10,7 @@ export const createTeacher = async (req, res) => {
       email: email,
       phone: phone,
       subjects: subjects,
-      class: classId
+      class: classId,
     });
     return res.status(200).json({
       success: true,
@@ -24,6 +24,31 @@ export const createTeacher = async (req, res) => {
   }
 };
 
+//edit teacher
+export const editTeacher = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name, classId, age, email, phone, subjects } = req.body;
+    const teacher = await teacherModel.findByIdAndUpdate(id, {
+      name,
+      age,
+      email,
+      phone,
+      subjects,
+      class: classId,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Teacher edited successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
 //vierw all teachers
 export const getTeachers = async (req, res) => {
   try {
@@ -45,7 +70,7 @@ export const getTeachers = async (req, res) => {
 export const getTeacherById = async (req, res) => {
   try {
     const id = req.params.id;
-    const teachers = await teacherModel.findOne({_id: id}).populate("class", "className");
+    const teachers = await teacherModel.findOne({ _id: id }).populate("class", "className");
     return res.status(200).json({
       success: true,
       message: "Teacher data fetched successfully",
@@ -62,7 +87,7 @@ export const getTeacherById = async (req, res) => {
 export const deleteTeacher = async (req, res) => {
   try {
     const id = req.params.id;
-    const teachers = await teacherModel.deleteOne({ _id: id});
+    const teachers = await teacherModel.deleteOne({ _id: id });
     return res.status(200).json({
       success: true,
       message: "Teacher data deleted successfully",
@@ -74,4 +99,3 @@ export const deleteTeacher = async (req, res) => {
     });
   }
 };
-

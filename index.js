@@ -1,13 +1,16 @@
-import env from './src/env.js'
+import env from "./src/env.js";
 import ConnectDB from "./src/config/db.js";
 import express from "express";
 import cors from "cors";
+import jwt from "jsonwebtoken";
+
 import { studentRoutes } from "./src/routes/studentRoutes.js";
 import { classRoutes } from "./src/routes/classRoutes.js";
-import { teacherRoutes } from './src/routes/teacherRoutes.js';
-import { examRoutes } from './src/routes/examRoutes.js';
-import { homeworkRoutes } from './src/routes/homeworkRoutes.js';
-import { feesRoutes } from './src/routes/feesRoutes.js';
+import { teacherRoutes } from "./src/routes/teacherRoutes.js";
+import { examRoutes } from "./src/routes/examRoutes.js";
+import { homeworkRoutes } from "./src/routes/homeworkRoutes.js";
+import { feesRoutes } from "./src/routes/feesRoutes.js";
+import { userRoutes } from "./src/routes/userRoutes.js";
 
 const app = express();
 
@@ -16,8 +19,8 @@ app.use(express.json());
 
 const { PORT } = env;
 
-
 //ROUTES
+app.use("/dashboard/api/user", userRoutes);
 app.use("/dashboard/api/student", studentRoutes);
 app.use("/dashboard/api/class", classRoutes);
 app.use("/dashboard/api/teacher", teacherRoutes);

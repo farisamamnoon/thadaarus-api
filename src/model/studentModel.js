@@ -55,7 +55,7 @@ const studentSchema = new mongoose.Schema({
     },
   ],
   // match student class with exam class and view subject names(/exam/marks/add)
-  exams: [
+  marks: [
     {
       examId: {
         type: mongoose.Types.ObjectId,

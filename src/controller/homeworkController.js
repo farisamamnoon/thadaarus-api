@@ -3,7 +3,6 @@ import homeworkModel from "../model/homeworkModel.js";
 //create homework
 export const createHomeWork = async (req, res) => {
   try {
-    console.log(req.body);
     const { classId, date, desc, subjectId } = req.body;
     const newWork = await homeworkModel.create({
       classId: classId,
@@ -11,24 +10,46 @@ export const createHomeWork = async (req, res) => {
       date: date,
       desc: desc,
     });
-    console.log("haii");
     return res.status(200).json({
-      status: true,
+      success: true,
       message: "Home Work assigned successfully",
     });
   } catch (error) {
     res.status(500).json({
-      status: false,
+      success: false,
       message: "Internal Server Error",
     });
+  }
+};
+
+//edit homework
+export const editHomework = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const reqObjects = req.body;
+    const updateObjects = {};
+    for(const key in reqObjects){
+      updateObjects[key] = reqObjects[key];
+    }
+
+    const homeworks = await homeworkModel.findByIdAndUpdate(id, updateObjects);
+    return res.status(200).json({
+      success: true,
+      message: "Homework data edited successfully",
+    });
+  } catch (error) {
     console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
 
 //get all homeworks
 export const getHomeworks = async (req, res) => {
   try {
-    const homeworks = await homeworkModel.find().populate("classId", "className");
+    const homeworks = await homeworkModel.find().populate("classId", "className").populate("students", "name");
     return res.status(200).json({
       success: true,
       message: "Homeworks data fetched successfully",

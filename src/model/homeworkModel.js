@@ -18,7 +18,7 @@ const homeworkModel = mongoose.Schema({
     type: String,
     required: true,
   },
-  doneStudents: [
+  students: [
     {
       type: mongoose.Types.ObjectId,
       required: false,

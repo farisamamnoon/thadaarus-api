@@ -42,6 +42,7 @@ export const getClasses = async (req, res) => {
   }
 };
 
+//get class by id
 export const getClassById = async (req, res) => {
   try {
     const classId = req.params.id;
@@ -59,6 +60,7 @@ export const getClassById = async (req, res) => {
   }
 };
 
+//edit class
 export const updateClass = async (req, res) => {
   try {
     const classId = req.params.id;
@@ -81,10 +83,11 @@ export const updateClass = async (req, res) => {
   }
 };
 
+//get subjects by classId
 export const getSubjectsByClass = async (req, res) => {
   try {
     const classId = req.params.id;
-    const subjects = await classModel.findById(classId);
+    const subjects = await classModel.findById(classId).select('subjects');
     return res.status(200).json({
       success: true,
       message: "Class subjects fetched successfully",
@@ -92,6 +95,23 @@ export const getSubjectsByClass = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+//delete class
+export const deleteClass = async (req, res) => {
+  try {
+    const classId = req.params.id;
+    const classData = await classModel.deleteOne({ _id: classId });
+    return res.status(200).json({
+      success: true,
+      message: "Class deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: "Internal Server Error",
     });
