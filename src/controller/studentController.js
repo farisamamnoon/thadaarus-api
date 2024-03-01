@@ -6,16 +6,37 @@ export const createStudent = async (req, res) => {
     const { name, dob, age, address, group, phone, classId, prevMadrasa, prevClass, remarks } =
       req.body;
     const student = await studentModel.create({
-      name: name,
-      dob: dob,
-      age: age,
-      address: address,
-      group: group,
-      phone: phone,
+      name,
+      dob,
+      age,
+      address,
+      group,
+      phone,
       class: classId,
-      prevMadrasa: prevMadrasa,
-      prevClass: prevClass,
-      remarks: remarks,
+      prevMadrasa,
+      prevClass,
+      remarks,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Student data created successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error,
+    });
+  }
+};
+
+//new exam marks
+export const newExamMarks = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { examName, marks } = req.body;
+    const student = await studentModel.findByIdAndUpdate(studentId, {
+      $push: { marks: { examName, marks } },
     });
     return res.status(200).json({
       success: true,
@@ -26,6 +47,7 @@ export const createStudent = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
+      error: error,
     });
   }
 };
@@ -102,7 +124,7 @@ export const getStudentById = async (req, res) => {
 export const getStudentByClass = async (req, res) => {
   try {
     const classId = req.params.id;
-    const student = await studentModel.find({ class: classId });
+    const student = await studentModel.find({ class: classId }).populate("class", "fees");
     return res.status(200).json({
       success: true,
       message: "Student by classId data fetched successfully",

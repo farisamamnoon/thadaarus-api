@@ -22,13 +22,31 @@ export const createHomeWork = async (req, res) => {
   }
 };
 
+//get by class
+export const getHomeworkByClass = async (req, res) => {
+  try {
+    const classId = req.params.id;
+    const data = await homeworkModel.find({ classId }).populate("students", "name");
+    return res.status(200).json({
+      success: true,
+      message: "Home Work fetched successfully",
+      data
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 //edit homework
 export const editHomework = async (req, res) => {
   try {
     const id = req.params.id;
     const reqObjects = req.body;
     const updateObjects = {};
-    for(const key in reqObjects){
+    for (const key in reqObjects) {
       updateObjects[key] = reqObjects[key];
     }
 
@@ -49,7 +67,10 @@ export const editHomework = async (req, res) => {
 //get all homeworks
 export const getHomeworks = async (req, res) => {
   try {
-    const homeworks = await homeworkModel.find().populate("classId", "className").populate("students", "name");
+    const homeworks = await homeworkModel
+      .find()
+      .populate("classId", "className")
+      .populate("students", "name");
     return res.status(200).json({
       success: true,
       message: "Homeworks data fetched successfully",

@@ -20,6 +20,7 @@ export const createTeacher = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
+      error: error.message,
     });
   }
 };
@@ -49,10 +50,11 @@ export const editTeacher = async (req, res) => {
     });
   }
 };
+
 //vierw all teachers
 export const getTeachers = async (req, res) => {
   try {
-    const teachers = await teacherModel.find().populate("class", "className");
+    const teachers = await teacherModel.find();
     return res.status(200).json({
       success: true,
       message: "Teacher data fetched successfully",

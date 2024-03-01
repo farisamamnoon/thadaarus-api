@@ -1,8 +1,10 @@
 import express from "express";
 
 import {
+  addAttendance,
   createClass,
   deleteClass,
+  editClass,
   getClassById,
   getClasses,
   getSubjectsByClass,
@@ -11,7 +13,9 @@ import {
 export const classRoutes = express.Router();
 
 classRoutes.post("/create", createClass);
+classRoutes.put("/:id", editClass);
 classRoutes.get("/get-all", getClasses);
 classRoutes.get("/:id/get-subjects", getSubjectsByClass);
-classRoutes.delete("/:id/delete", deleteClass);
 classRoutes.get("/:id", getClassById);
+classRoutes.put("/:id/attendance", addAttendance);
+classRoutes.delete("/:id/delete", deleteClass);

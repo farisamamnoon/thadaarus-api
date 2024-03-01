@@ -11,7 +11,7 @@ const classModel = mongoose.Schema({
   },
   teacherId: {
     type: mongoose.Types.ObjectId,
-    required: true,
+    required: false,
     ref: "Teachers",
   },
   fees: {
@@ -22,6 +22,20 @@ const classModel = mongoose.Schema({
     type: Number,
     required: true,
   },
+  attendance: [
+    {
+      date: {
+        type: Date,
+        required: true,
+      },
+      attendance: [
+        {
+          studentId: { type: mongoose.Types.ObjectId, required: true },
+          isPresent: { type: Boolean, required: true },
+        },
+      ],
+    },
+  ],
   subjects: [
     {
       type: String,

@@ -3,21 +3,22 @@ import classModel from "../model/classModel.js";
 //create new class
 export const createClass = async (req, res) => {
   try {
-    const { className, division, subjects, batch, fees, teacherId } = req.body;
+    const { className, division, subjects, batch, fees, teacher } = req.body;
 
     const student = await classModel.create({
-      className: className,
-      division: division,
-      subjects: subjects,
-      batch: batch,
-      teacherId: teacherId,
-      fees: fees,
+      className,
+      division,
+      subjects,
+      batch,
+      teacherId: teacher,
+      fees,
     });
     return res.status(200).json({
       success: true,
       message: "Class created successfully",
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -28,7 +29,7 @@ export const createClass = async (req, res) => {
 //get all classes
 export const getClasses = async (req, res) => {
   try {
-    const classes = await classModel.find();
+    const classes = await classModel.find().populate("teacherId", "name");
     return res.status(200).json({
       success: true,
       message: "Class fetched successfully",
@@ -61,24 +62,27 @@ export const getClassById = async (req, res) => {
 };
 
 //edit class
-export const updateClass = async (req, res) => {
+export const editClass = async (req, res) => {
   try {
     const classId = req.params.id;
-    const { className, division, teacher, subjects, batch, fees } = req.body;
-    const classData = await classModel.findOne({ _id: classId });
-    classData.className = className;
-
-    classData.save();
-
+    const { className, division, teacherId, subjects, batch, fees } = req.body;
+    const classData = await classModel.findByIdAndUpdate(classId, {
+      className,
+      division,
+      teacherId,
+      subjects,
+      batch,
+      fees,
+    });
     return res.status(200).json({
       success: true,
       message: "Class fetched successfully",
-      data: classData,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
+      error: error,
     });
   }
 };
@@ -87,7 +91,7 @@ export const updateClass = async (req, res) => {
 export const getSubjectsByClass = async (req, res) => {
   try {
     const classId = req.params.id;
-    const subjects = await classModel.findById(classId).select('subjects');
+    const subjects = await classModel.findById(classId).select("subjects");
     return res.status(200).json({
       success: true,
       message: "Class subjects fetched successfully",
@@ -97,6 +101,36 @@ export const getSubjectsByClass = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+//add attendance
+export const addAttendance = async (req, res) => {
+  try {
+    const classId = req.params.id;
+    const { date, present, absent } = req.body;
+    const attendance = [];
+    present.forEach((item) => {
+      attendance.push({ studentId: item, isPresent: true });
+    });
+    absent.forEach((item) => {
+      attendance.push({ studentId: item, isPresent: false });
+    });
+    
+    const response = await classModel.findByIdAndUpdate(classId, {
+      $push: { attendance: { date, attendance } },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Attendance inserted",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: err,
     });
   }
 };

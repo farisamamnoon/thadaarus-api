@@ -4,25 +4,22 @@ import studentModel from "../model/studentModel.js";
 export const createFees = async (req, res) => {
   try {
     const { studentId, date, amount, discount } = req.body;
-    let newFees = {
-      date: date,
-      amount: amount,
-      discount: discount,
-    };
-    const studentData = await studentModel.findOneAndUpdate(
-      { _id: studentId },
-      { $push: { fees: newFees } },
-      { new: true, useFindAndModify: false }
+    let feesDetails = { date, amount, discount };
+    const studentData = await studentModel.findByIdAndUpdate(
+      studentId,
+      { $push: { fees: feesDetails } },
+      { new: true }
     );
+    console.log(studentData);
     res.status(200).json({
       success: true,
       message: "Fees data added successfully",
-      data: studentData,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: `Internal Server Error::\n${error}`,
+      message: "Internal Server Error",
+      error: error,
     });
   }
 };

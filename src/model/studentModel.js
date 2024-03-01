@@ -42,30 +42,26 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  attendance: [
-    {
-      date: {
-        type: Date,
-        required: true,
-      },
-      isPresent: {
-        type: Boolean,
-        required: true,
-      },
-    },
-  ],
   // match student class with exam class and view subject names(/exam/marks/add)
   marks: [
     {
-      examId: {
+      examName: {
         type: mongoose.Types.ObjectId,
-        required: false,
+        required: true,
         ref: "Exams",
       },
-      mark: {
-        type: Number,
-        required: false,
-      },
+      marks: [
+        {
+          subject: {
+            type: String,
+            required: false,
+          },
+          mark: {
+            type: Number,
+            required: false,
+          },
+        },
+      ],
     },
   ],
   fees: [
