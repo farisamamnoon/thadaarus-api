@@ -9,26 +9,43 @@ const eventModel = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  participants: [
+  programs: [
     {
-      type: mongoose.Types.ObjectId,
-      required: false,
-      ref: "Students",
+      programName: {
+        type: String,
+        required: true,
+      },
+      category: {
+        type: String,
+        required: true,
+      },
+      ranking: [
+        {
+          rank: {
+            type: Number,
+            required: false,
+          },
+          studentId: {
+            type: mongoose.Types.ObjectId,
+            required: false,
+            ref: "Students",
+          },
+          participants: [
+            {
+              type: mongoose.Types.ObjectId,
+              required: false,
+              ref: "Students",
+            },
+          ],
+        },
+      ],
     },
   ],
-  ranking: [
-    {
-      rank: {
-        type: Number,
-        required: false,
-      },
-      studentId: {
-        type: mongoose.Types.ObjectId,
-        required: false,
-        ref: "Students",
-      },
-    },
-  ],
+
+  isFinished: {
+    type: Boolean,
+    required: false,
+  },
 });
 
 export default mongoose.model("Events", eventModel);

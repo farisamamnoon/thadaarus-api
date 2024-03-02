@@ -11,6 +11,7 @@ import { examRoutes } from "./src/routes/examRoutes.js";
 import { homeworkRoutes } from "./src/routes/homeworkRoutes.js";
 import { feesRoutes } from "./src/routes/feesRoutes.js";
 import { userRoutes } from "./src/routes/userRoutes.js";
+import { eventRoutes } from "./src/routes/eventRoutes.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/dashboard/api/teacher", teacherRoutes);
 app.use("/dashboard/api/exam", examRoutes);
 app.use("/dashboard/api/homework", homeworkRoutes);
 app.use("/dashboard/api/fees", feesRoutes);
+app.use("/dashboard/api/event", eventRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");

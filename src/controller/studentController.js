@@ -43,6 +43,29 @@ export const newExamMarks = async (req, res) => {
       message: "Student data created successfully",
     });
   } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error,
+    });
+  }
+};
+
+//get exam marks
+export const getMarksByStudent = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const student = await studentModel
+      .findById(studentId)
+      .select("marks")
+      .populate("marks.examName", "examName");
+
+    return res.status(200).json({
+      success: true,
+      message: "Student marks fetched successfully",
+      data: student,
+    });
+  } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
