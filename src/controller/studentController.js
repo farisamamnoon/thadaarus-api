@@ -162,6 +162,55 @@ export const getStudentByClass = async (req, res) => {
   }
 };
 
+// Function to fetch students grouped by category name based on date of birth
+export const getStudentsByCategory = async (req, res) => {
+  try {
+    const result = await studentModel.aggregate([
+      {
+        $lookup: {
+          from: "categories", // Collection name
+          let: { studentDob: "$dob" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $lte: ["$fromDate", "$$studentDob"] }, 
+                    { $gte: ["$toDate", "$$studentDob"] }, 
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0, categoryName: "$name" } }, 
+          ],
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: "$categoryInfo", 
+      },
+      {
+        $project: {
+          _id: 1, // Include student _id
+          studentName: "$name", // Include student name
+          categoryName: "$categoryInfo.categoryName", // Include categoryName from the lookup
+        },
+      },
+    ]);
+    return res.status(200).json({
+      success: true,
+      message: "Category students fetched",
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 //delete student
 export const deleteStudent = async (req, res) => {
   try {

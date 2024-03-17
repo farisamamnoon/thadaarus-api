@@ -16,9 +16,16 @@ const eventModel = new mongoose.Schema({
         required: true,
       },
       category: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
       },
+      participants: [
+        {
+          type: mongoose.Types.ObjectId,
+          required: false,
+          ref: "Students",
+        },
+      ],
       ranking: [
         {
           rank: {
@@ -30,13 +37,6 @@ const eventModel = new mongoose.Schema({
             required: false,
             ref: "Students",
           },
-          participants: [
-            {
-              type: mongoose.Types.ObjectId,
-              required: false,
-              ref: "Students",
-            },
-          ],
         },
       ],
     },

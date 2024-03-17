@@ -8,6 +8,7 @@ import {
   getStudentByClass,
   getStudentById,
   getStudents,
+  getStudentsByCategory,
   newExamMarks,
 } from "../controller/studentController.js";
 
@@ -18,6 +19,7 @@ studentRoutes.post("/:id/marks", newExamMarks);
 studentRoutes.get("/:id/marks", getMarksByStudent);
 studentRoutes.get("/get-all", getStudents);
 studentRoutes.get("/class/:id", getStudentByClass);
+studentRoutes.get("/category", getStudentsByCategory);
 studentRoutes.put("/:id/edit", editStudent);
 studentRoutes.get("/:id", getStudentById);
 studentRoutes.delete("/:id/delete", deleteStudent);
