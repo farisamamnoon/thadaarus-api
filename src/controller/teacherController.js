@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import teacherModel from "../model/teacherModel.js";
 
 //add teacher
@@ -54,13 +55,36 @@ export const editTeacher = async (req, res) => {
 //vierw all teachers
 export const getTeachers = async (req, res) => {
   try {
-    const teachers = await teacherModel.find();
+    const teachers = await teacherModel.aggregate([
+      {
+        $lookup: {
+          from: "classes",
+          localField: "_id",
+          foreignField: "teacherId",
+          as: "result",
+        },
+      },
+      {
+        $unwind: {
+          path: "$result",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          phone: 1,
+          email: 1,
+          class: "$result.className",
+        },
+      },
+    ]);
     return res.status(200).json({
       success: true,
       message: "Teacher data fetched successfully",
       data: teachers,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -72,16 +96,46 @@ export const getTeachers = async (req, res) => {
 export const getTeacherById = async (req, res) => {
   try {
     const id = req.params.id;
-    const teachers = await teacherModel.findOne({ _id: id }).populate("class", "className");
+    const teachers = await teacherModel.aggregate([
+      {
+        $match: {
+          _id: new ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: "classes",
+          localField: "_id",
+          foreignField: "teacherId",
+          as: "result",
+        },
+      },
+      {
+        $unwind: {
+          path: "$result",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          age: 1,
+          phone: 1,
+          email: 1,
+          class: "$result._id",
+        },
+      },
+    ]);
     return res.status(200).json({
       success: true,
       message: "Teacher data fetched successfully",
       data: teachers,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
+      error,
     });
   }
 };

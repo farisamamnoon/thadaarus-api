@@ -30,7 +30,7 @@ export const getHomeworkByClass = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Home Work fetched successfully",
-      data
+      data,
     });
   } catch (error) {
     res.status(500).json({
@@ -89,7 +89,7 @@ export const getHomeworkById = async (req, res) => {
   try {
     const id = req.params.id;
     const { classId, date, desc, subjectId } = req.body;
-    const homeworks = await homeworkModel.findOne({ _id: id }).populate("classId", "className");
+    const homeworks = await homeworkModel.findById(id);
     return res.status(200).json({
       success: true,
       message: "Homework data fetched successfully",

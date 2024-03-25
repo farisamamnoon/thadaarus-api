@@ -29,7 +29,7 @@ export const createClass = async (req, res) => {
 //get all classes
 export const getClasses = async (req, res) => {
   try {
-    const classes = await classModel.find().populate("teacherId", "name");
+    const classes = await classModel.find().populate("teacherId", "name").sort({ className: 1 });
     return res.status(200).json({
       success: true,
       message: "Class fetched successfully",
@@ -118,7 +118,7 @@ export const addAttendance = async (req, res) => {
     absent.forEach((item) => {
       attendance.push({ studentId: item, isPresent: false });
     });
-    
+
     const response = await classModel.findByIdAndUpdate(classId, {
       $push: { attendance: { date, attendance } },
     });
