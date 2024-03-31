@@ -67,6 +67,7 @@ export const getTeachers = async (req, res) => {
       {
         $unwind: {
           path: "$result",
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -74,6 +75,7 @@ export const getTeachers = async (req, res) => {
           name: 1,
           phone: 1,
           email: 1,
+          age: 1,
           class: "$result.className",
         },
       },
