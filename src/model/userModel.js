@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  batch: {
+    type: Number,
+    required: true,
+  },
 });
 
 export default mongoose.model("Users", userSchema)

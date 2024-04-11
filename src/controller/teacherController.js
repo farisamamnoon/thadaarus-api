@@ -1,17 +1,30 @@
 import { ObjectId } from "mongodb";
 import teacherModel from "../model/teacherModel.js";
+import userModel from "../model/userModel.js";
+import { genSaltSync, hashSync } from "bcrypt";
 
 //add teacher
 export const createTeacher = async (req, res) => {
   try {
     const { name, classId, age, email, phone, subjects } = req.body;
-    const teacher = await teacherModel.create({
+    const salt = genSaltSync(10);
+    let pass = name.slice(0,4).concat(phone.slice(0,4)).toUpperCase();
+    const password = hashSync(pass, salt);
+    
+    await teacherModel.create({
       name: name,
       age: age,
       email: email,
       phone: phone,
       subjects: subjects,
       class: classId,
+    });
+
+    await userModel.create({
+      userName: email,
+      name,
+      role: "teacher",
+      password,
     });
     return res.status(200).json({
       success: true,

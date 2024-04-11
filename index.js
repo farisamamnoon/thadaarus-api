@@ -12,6 +12,7 @@ import { homeworkRoutes } from "./src/routes/homeworkRoutes.js";
 import { feesRoutes } from "./src/routes/feesRoutes.js";
 import { userRoutes } from "./src/routes/userRoutes.js";
 import { eventRoutes } from "./src/routes/eventRoutes.js";
+import userModel from "./src/model/userModel.js";
 
 const app = express();
 
@@ -29,6 +30,21 @@ app.use("/dashboard/api/exam", examRoutes);
 app.use("/dashboard/api/homework", homeworkRoutes);
 app.use("/dashboard/api/fees", feesRoutes);
 app.use("/dashboard/api/event", eventRoutes);
+app.use("/dashboard/api/init",(req, res, next) => {
+  const admin = userModel.findOne({role: "admin"});
+  if(!admin){
+    userModel.create({
+      userName: "admin",
+      name: "admin",
+      role: "admin",
+      password: "admin1234",
+    })
+  } else {
+    return res.json({
+      batch: admin.batch
+    })
+  }
+})
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");

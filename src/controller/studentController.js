@@ -57,7 +57,6 @@ export const getMarksByStudent = async (req, res) => {
     const studentId = req.params.id;
     const student = await studentModel
       .findById(studentId)
-      .select("marks")
       .populate("marks.examName", "examName");
 
     return res.status(200).json({

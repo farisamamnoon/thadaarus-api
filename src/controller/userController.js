@@ -1,7 +1,6 @@
 import userModel from "../model/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import env from "../env.js";
 
 //add user
@@ -37,6 +36,7 @@ export const userLogin = async (req, res) => {
     const { userName, password } = req.body;
     const login = await userModel.findOne({ userName: userName });
     const isMatch = bcrypt.compareSync(password, login.password);
+    console.log(login);
 
     if (!isMatch) {
       return res.status(201).json({
