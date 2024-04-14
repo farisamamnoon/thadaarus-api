@@ -5,6 +5,11 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  batch: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "Batch",
+  },
   class: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -18,6 +23,18 @@ const studentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  attendance: [
+    {
+      date: {
+        type: Date,
+        required: true,
+      },
+      attendance: {
+        type: Boolean,
+        required: true,
+      },
+    },
+  ],
   phone: {
     type: Number,
     required: true,
@@ -28,7 +45,7 @@ const studentSchema = new mongoose.Schema({
   },
   group: {
     type: String,
-    required: true,
+    required: false,
   },
   prevMadrasa: {
     type: String,

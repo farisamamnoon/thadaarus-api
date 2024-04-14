@@ -61,6 +61,40 @@ export const getClassById = async (req, res) => {
   }
 };
 
+//get attendance of student
+export const attendanceByStudent = async (req, res) => {
+  try {
+    const studentId = req.params.id;console.log(studentId);
+    const attendance = await classModel.aggregate([
+      {
+        $unwind: "$attendance",
+      },
+      {
+        $match: {
+          "attendance.attendance.studentId": studentId,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          date: "$attendance.date",
+          isPresent: "$attendance.attendance.isPresent",
+        },
+      },
+    ]);
+    return res.status(200).json({
+      success: true,
+      message: "Attendance fetched successfully",
+      data: attendance,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 //edit class
 export const editClass = async (req, res) => {
   try {

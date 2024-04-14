@@ -18,10 +18,6 @@ const classModel = mongoose.Schema({
     type: Number,
     required: true,
   },
-  batch: {
-    type: Number,
-    required: true,
-  },
   attendance: [
     {
       date: {

@@ -12,7 +12,8 @@ import { homeworkRoutes } from "./src/routes/homeworkRoutes.js";
 import { feesRoutes } from "./src/routes/feesRoutes.js";
 import { userRoutes } from "./src/routes/userRoutes.js";
 import { eventRoutes } from "./src/routes/eventRoutes.js";
-import userModel from "./src/model/userModel.js";
+import { batchRoutes } from "./src/routes/batchRoutes.js";
+import { subjectRoutes } from "./src/routes/subjectRoutes.js";
 
 const app = express();
 
@@ -25,26 +26,13 @@ const { PORT } = env;
 app.use("/dashboard/api/user", userRoutes);
 app.use("/dashboard/api/student", studentRoutes);
 app.use("/dashboard/api/class", classRoutes);
+app.use("/dashboard/api/batch", batchRoutes);
+app.use("/dashboard/api/subject", subjectRoutes);
 app.use("/dashboard/api/teacher", teacherRoutes);
 app.use("/dashboard/api/exam", examRoutes);
 app.use("/dashboard/api/homework", homeworkRoutes);
 app.use("/dashboard/api/fees", feesRoutes);
 app.use("/dashboard/api/event", eventRoutes);
-app.use("/dashboard/api/init",(req, res, next) => {
-  const admin = userModel.findOne({role: "admin"});
-  if(!admin){
-    userModel.create({
-      userName: "admin",
-      name: "admin",
-      role: "admin",
-      password: "admin1234",
-    })
-  } else {
-    return res.json({
-      batch: admin.batch
-    })
-  }
-})
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");

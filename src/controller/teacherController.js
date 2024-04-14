@@ -22,7 +22,6 @@ export const createTeacher = async (req, res) => {
 
     await userModel.create({
       userName: email,
-      name,
       role: "teacher",
       password,
     });

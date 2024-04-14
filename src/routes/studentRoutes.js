@@ -10,12 +10,16 @@ import {
   getStudents,
   getStudentsByCategory,
   newExamMarks,
+  getAttendance,
+  markAttendance,
 } from "../controller/studentController.js";
 
 export const studentRoutes = express.Router();
 
 studentRoutes.post("/create", createStudent);
 studentRoutes.post("/:id/marks", newExamMarks);
+studentRoutes.put("/:id/attendance", markAttendance);
+studentRoutes.get("/:id/attendance", getAttendance);
 studentRoutes.get("/:id/marks", getMarksByStudent);
 studentRoutes.get("/get-all", getStudents);
 studentRoutes.get("/class/:id", getStudentByClass);
