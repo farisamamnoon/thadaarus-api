@@ -15,6 +15,10 @@ const studentSchema = new mongoose.Schema({
     required: true,
     ref: "Class",
   },
+  totalFees: {
+    type: Number,
+    required: true,
+  },
   dob: {
     type: Date,
     required: true,

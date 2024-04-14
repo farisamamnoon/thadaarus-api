@@ -13,6 +13,7 @@ export const createStudent = async (req, res) => {
       group,
       phone,
       classId,
+      fees,
       batch,
       prevMadrasa,
       prevClass,
@@ -22,7 +23,7 @@ export const createStudent = async (req, res) => {
     const salt = genSaltSync(10);
     let pass = name.slice(0, 4).concat(phone.slice(0, 4)).toUpperCase();
     const password = hashSync(pass, salt);
-    
+
     await studentModel.create({
       name,
       dob,
@@ -30,13 +31,14 @@ export const createStudent = async (req, res) => {
       address,
       group,
       phone,
+      totalFees: fees,
       batch,
       class: classId,
       prevMadrasa,
       prevClass,
       remarks,
     });
-    
+
     await userModel.create({
       userName: name,
       role: "student",
@@ -237,8 +239,9 @@ export const getStudentById = async (req, res) => {
 //get student by class
 export const getStudentByClass = async (req, res) => {
   try {
+    const batchId = req.params.batchId;
     const classId = req.params.id;
-    const student = await studentModel.find({ class: classId }).populate("class", "fees");
+    const student = await studentModel.find({ class: classId, batch: batchId });
     return res.status(200).json({
       success: true,
       message: "Student by classId data fetched successfully",

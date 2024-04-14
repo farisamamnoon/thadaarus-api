@@ -3,15 +3,11 @@ import classModel from "../model/classModel.js";
 //create new class
 export const createClass = async (req, res) => {
   try {
-    const { className, division, subjects, batch, fees, teacher } = req.body;
+    const { className, subjects } = req.body;
 
     const student = await classModel.create({
       className,
-      division,
       subjects,
-      batch,
-      teacherId: teacher,
-      fees,
     });
     return res.status(200).json({
       success: true,
@@ -29,13 +25,22 @@ export const createClass = async (req, res) => {
 //get all classes
 export const getClasses = async (req, res) => {
   try {
-    const classes = await classModel.find().populate("teacherId", "name").sort({ className: 1 });
+    const classes = await classModel
+      .find()
+      .sort({ className: 1 })
+      .populate({
+        path: "subjects",
+        model: "subjects", // Assuming the model name for your class is "Class"
+        select: "name", // Select the field you want to populate
+        options: { sort: { createdAt: -1 } }, // Optional: Sorting options for each element
+      });
     return res.status(200).json({
       success: true,
       message: "Class fetched successfully",
       data: classes,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -47,7 +52,7 @@ export const getClasses = async (req, res) => {
 export const getClassById = async (req, res) => {
   try {
     const classId = req.params.id;
-    const classData = await classModel.findOne({ _id: classId });
+    const classData = await classModel.findById(classId);
     return res.status(200).json({
       success: true,
       message: "Class fetched successfully",
@@ -64,7 +69,8 @@ export const getClassById = async (req, res) => {
 //get attendance of student
 export const attendanceByStudent = async (req, res) => {
   try {
-    const studentId = req.params.id;console.log(studentId);
+    const studentId = req.params.id;
+    console.log(studentId);
     const attendance = await classModel.aggregate([
       {
         $unwind: "$attendance",
@@ -99,14 +105,10 @@ export const attendanceByStudent = async (req, res) => {
 export const editClass = async (req, res) => {
   try {
     const classId = req.params.id;
-    const { className, division, teacherId, subjects, batch, fees } = req.body;
-    const classData = await classModel.findByIdAndUpdate(classId, {
+    const { className, subjects } = req.body;
+    await classModel.findByIdAndUpdate(classId, {
       className,
-      division,
-      teacherId,
       subjects,
-      batch,
-      fees,
     });
     return res.status(200).json({
       success: true,

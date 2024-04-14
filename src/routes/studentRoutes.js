@@ -22,7 +22,7 @@ studentRoutes.put("/:id/attendance", markAttendance);
 studentRoutes.get("/:id/attendance", getAttendance);
 studentRoutes.get("/:id/marks", getMarksByStudent);
 studentRoutes.get("/get-all", getStudents);
-studentRoutes.get("/class/:id", getStudentByClass);
+studentRoutes.get("/batch/:batchId/class/:id", getStudentByClass);
 studentRoutes.get("/category", getStudentsByCategory);
 studentRoutes.put("/:id/edit", editStudent);
 studentRoutes.get("/:id", getStudentById);
