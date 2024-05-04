@@ -2,11 +2,12 @@ import examModel from "../model/examModel.js";
 
 export const createExam = async (req, res) => {
   try {
-    const { examName, classId, exams } = req.body;
-    const newExam = await examModel.create({
-      examName: examName,
-      classId: classId,
-      exams: exams,
+    const { examName, classId, batchId, exams } = req.body;
+    await examModel.create({
+      examName,
+      batchId,
+      classId,
+      exams,
     });
 
     return res.status(200).json({
@@ -42,7 +43,7 @@ export const getExams = async (req, res) => {
 export const getExamById = async (req, res) => {
   try {
     const examId = req.params.id;
-    const exams = await examModel.findById(examId);
+    const exams = await examModel.findById(examId).populate({ path: "exams.subjectId", select: "name" });
     return res.status(200).json({
       success: true,
       message: "Exam data fetched successfully",
@@ -60,8 +61,12 @@ export const getExamById = async (req, res) => {
 //get exam by class
 export const getExamByClass = async (req, res) => {
   try {
-    const classId = req.params.id;
-    const exams = await examModel.find({ classId: classId}).populate("classId", "className");
+    const classId = req.params.classId;
+    const batchId = req.params.batchId;
+    const exams = await examModel.find({ classId, batchId }).populate([
+      { path: "classId", select: "className" },
+      { path: "exams.subjectId", select: "name" },
+    ]);
     return res.status(200).json({
       success: true,
       message: "Exam by class is fetched",
@@ -90,7 +95,7 @@ export const editExam = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
-      error: error
+      error: error,
     });
   }
 };

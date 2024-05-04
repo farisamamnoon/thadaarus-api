@@ -70,7 +70,6 @@ export const getClassById = async (req, res) => {
 export const attendanceByStudent = async (req, res) => {
   try {
     const studentId = req.params.id;
-    console.log(studentId);
     const attendance = await classModel.aggregate([
       {
         $unwind: "$attendance",
@@ -126,8 +125,12 @@ export const editClass = async (req, res) => {
 //get subjects by classId
 export const getSubjectsByClass = async (req, res) => {
   try {
-    const classId = req.params.id;
-    const subjects = await classModel.findById(classId).select("subjects");
+    const classId = req.params.classId;
+    const subjects = await classModel
+      .findById(classId)
+      .populate({ path: "subjects", select: "name" })
+      .select("subjects");
+
     return res.status(200).json({
       success: true,
       message: "Class subjects fetched successfully",

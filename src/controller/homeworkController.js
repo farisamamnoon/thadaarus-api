@@ -3,12 +3,13 @@ import homeworkModel from "../model/homeworkModel.js";
 //create homework
 export const createHomeWork = async (req, res) => {
   try {
-    const { classId, date, desc, subjectId } = req.body;
+    const { batchId, classId, date, desc, subjectId } = req.body;
     const newWork = await homeworkModel.create({
-      classId: classId,
-      subjectId: subjectId,
-      date: date,
-      desc: desc,
+      classId,
+      batchId,
+      subjectId,
+      date,
+      desc,
     });
     return res.status(200).json({
       success: true,
@@ -26,7 +27,11 @@ export const createHomeWork = async (req, res) => {
 export const getHomeworkByClass = async (req, res) => {
   try {
     const classId = req.params.id;
-    const data = await homeworkModel.find({ classId }).populate("students", "name");
+    const batchId = req.params.batchId;
+    const data = await homeworkModel
+      .find({ classId, batchId })
+      .populate({ path: "students", select: "name" })
+      .populate("subjectId");
     return res.status(200).json({
       success: true,
       message: "Home Work fetched successfully",
@@ -36,6 +41,7 @@ export const getHomeworkByClass = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
+      error,
     });
   }
 };
@@ -44,13 +50,8 @@ export const getHomeworkByClass = async (req, res) => {
 export const editHomework = async (req, res) => {
   try {
     const id = req.params.id;
-    const reqObjects = req.body;
-    const updateObjects = {};
-    for (const key in reqObjects) {
-      updateObjects[key] = reqObjects[key];
-    }
-
-    const homeworks = await homeworkModel.findByIdAndUpdate(id, updateObjects);
+    const { subjectId, date, desc } = req.body;
+    await homeworkModel.findByIdAndUpdate(id, { subjectId, date, desc });
     return res.status(200).json({
       success: true,
       message: "Homework data edited successfully",

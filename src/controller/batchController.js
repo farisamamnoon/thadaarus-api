@@ -21,7 +21,6 @@ export const createBatch = async (req, res) => {
 //get al batches
 export const getBatches = async (req, res) => {
   try {
-    // const data = await batchModal.find().populate("classes className");
     const data = await batchModal.find().populate({
       path: "classes",
       model: "Class", // Assuming the model name for your class is "Class"

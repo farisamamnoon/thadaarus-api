@@ -2,6 +2,15 @@ import { genSaltSync, hashSync } from "bcrypt";
 import studentModel from "../model/studentModel.js";
 import userModel from "../model/userModel.js";
 
+// Configure your email service
+// const transporter = nodemailer.createTransport({
+//   service: "Gmail", // or other email services
+//   auth: {
+//     user: process.env.ADMIN_EMAIL,
+//     pass: process.env.ADMIN_PASSWORD,
+//   },
+// });
+
 //create student
 export const createStudent = async (req, res) => {
   try {
@@ -9,6 +18,7 @@ export const createStudent = async (req, res) => {
       name,
       dob,
       age,
+      email,
       address,
       group,
       phone,
@@ -19,10 +29,15 @@ export const createStudent = async (req, res) => {
       prevClass,
       remarks,
     } = req.body;
-    console.log(batch);
     const salt = genSaltSync(10);
     let pass = name.slice(0, 4).concat(phone.slice(0, 4)).toUpperCase();
     const password = hashSync(pass, salt);
+    // const mailOptions = {
+    //   from: env.ADMIN_EMAIL,
+    //   to: userName,
+    //   subject: "Your login credentials for THADAARUS",
+    //   text: `USERNAME: ${email}\nPASSWORD: ${pass}`,
+    // };
 
     await studentModel.create({
       name,
@@ -30,6 +45,7 @@ export const createStudent = async (req, res) => {
       age,
       address,
       group,
+      email,
       phone,
       totalFees: fees,
       batch,
@@ -40,7 +56,7 @@ export const createStudent = async (req, res) => {
     });
 
     await userModel.create({
-      userName: name,
+      userName: email,
       role: "student",
       password,
     });
@@ -80,10 +96,24 @@ export const markAttendance = async (req, res) => {
             console.log(`Student not found with ID: ${studentId}`);
             continue; // Skip to next iteration if student not found
           }
-          student.attendance.push({ date, attendance: attendanceStatus });
+
+          //attendance date validation
+          const existingAttendance = student.attendance.find(
+            (entry) => entry.date.toDateString() === date.toDateString()
+          );
+          if (existingAttendance) {
+            throw new Error("Attendance for this date already exists");
+          }
+
+          // Add the new attendance entry
+          student.attendance.push({
+            date,
+            attendance: attendanceStatus,
+          });
           await student.save();
         } catch (error) {
           console.error(`Error updating attendance for student with ID ${studentId}: ${error}`);
+          throw new Error(error);
         }
       }
     };
@@ -172,16 +202,30 @@ export const getMarksByStudent = async (req, res) => {
 export const editStudent = async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, dob, age, address, group, phone, classId, prevMadrasa, prevClass, remarks } =
-      req.body;
-    const student = await studentModel.findByIdAndUpdate(id, {
+    const {
       name,
       dob,
       age,
       address,
       group,
       phone,
+      classId,
+      fees,
+      batch,
+      prevMadrasa,
+      prevClass,
+      remarks,
+    } = req.body;
+    const student = await studentModel.findByIdAndUpdate(id, {
+      name,
+      dob,
+      age,
+      batch,
       class: classId,
+      address,
+      totalFees: fees,
+      group,
+      phone,
       prevMadrasa,
       prevClass,
       remarks,
@@ -203,6 +247,30 @@ export const editStudent = async (req, res) => {
 export const getStudents = async (req, res) => {
   try {
     const student = await studentModel.find().populate("class", "className");
+    return res.status(200).json({
+      success: true,
+      message: "Students data fetched successfully",
+      data: student,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: `Internal Server Error:\n${error}`,
+    });
+  }
+};
+
+//get student fees
+export const getStudentFees = async (req, res) => {
+  try {
+    const student = await studentModel
+      .find()
+      .select(["fees", "class", "batch"])
+      .populate([
+        { path: "class", select: "className" },
+        { path: "batch", select: "name" },
+      ]);
     return res.status(200).json({
       success: true,
       message: "Students data fetched successfully",

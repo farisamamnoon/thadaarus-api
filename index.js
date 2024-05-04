@@ -2,7 +2,7 @@ import env from "./src/env.js";
 import ConnectDB from "./src/config/db.js";
 import express from "express";
 import cors from "cors";
-import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 import { studentRoutes } from "./src/routes/studentRoutes.js";
 import { classRoutes } from "./src/routes/classRoutes.js";
@@ -14,6 +14,8 @@ import { userRoutes } from "./src/routes/userRoutes.js";
 import { eventRoutes } from "./src/routes/eventRoutes.js";
 import { batchRoutes } from "./src/routes/batchRoutes.js";
 import { subjectRoutes } from "./src/routes/subjectRoutes.js";
+import userModel from "./src/model/userModel.js";
+import { isAdmin } from "./src/config/isAdmin.js";
 
 const app = express();
 
@@ -60,6 +62,8 @@ app.use((err, req, res, next) => {
   next();
 });
 ConnectDB();
-app.listen(PORT, () => {
+
+app.listen(PORT, async () => {
+  await isAdmin();
   console.log(`Server listening to the port ${PORT}`);
 });

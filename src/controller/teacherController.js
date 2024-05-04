@@ -8,9 +8,9 @@ export const createTeacher = async (req, res) => {
   try {
     const { name, classId, age, email, phone, subjects } = req.body;
     const salt = genSaltSync(10);
-    let pass = name.slice(0,4).concat(phone.slice(0,4)).toUpperCase();
+    let pass = name.slice(0, 4).concat(phone.slice(0, 4)).toUpperCase();
     const password = hashSync(pass, salt);
-    
+
     await teacherModel.create({
       name: name,
       age: age,
@@ -110,35 +110,7 @@ export const getTeachers = async (req, res) => {
 export const getTeacherById = async (req, res) => {
   try {
     const id = req.params.id;
-    const teachers = await teacherModel.aggregate([
-      {
-        $match: {
-          _id: new ObjectId(id),
-        },
-      },
-      {
-        $lookup: {
-          from: "classes",
-          localField: "_id",
-          foreignField: "teacherId",
-          as: "result",
-        },
-      },
-      {
-        $unwind: {
-          path: "$result",
-        },
-      },
-      {
-        $project: {
-          name: 1,
-          age: 1,
-          phone: 1,
-          email: 1,
-          class: "$result._id",
-        },
-      },
-    ]);
+    const teachers = await teacherModel.findById(id);
     return res.status(200).json({
       success: true,
       message: "Teacher data fetched successfully",

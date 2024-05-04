@@ -13,6 +13,6 @@ export const examRoutes = express.Router();
 examRoutes.post("/create", createExam);
 examRoutes.get("/get-all", getExams);
 examRoutes.get("/:id", getExamById);
-examRoutes.get("/class/:id", getExamByClass);
+examRoutes.get("/class/:batchId/:classId", getExamByClass);
 examRoutes.put("/:id", editExam);
 examRoutes.delete("/:id", deleteExam);
